@@ -1,6 +1,10 @@
 # Kmongo
 Kmongo is a tool used for migrating data from MongoDB to another storage platform. It is developed in Rust programming language. Our primary reason for choosing Rust is its effective handling the resource (CPU, Memory), which can significantly impact infrastructure costs. Please note that this tool is currently in the development.
 
+# MongoDb Integration
+- [x] [single server](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+- [ ] [cluster](https://www.mongodb.com/basics/clusters/mongodb-cluster-setup)
+
 # Storage Integration
 - [x] [GCS](https://cloud.google.com/storage)
 - [x] Local File
