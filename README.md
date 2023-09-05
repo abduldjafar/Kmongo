@@ -7,3 +7,30 @@ Kmongo is a tool used for migrating data from MongoDB to another storage platfor
 - [ ] [Aws S3](https://aws.amazon.com/pm/serv-s3/)
 - [ ] [BigQuery](https://cloud.google.com/bigquery/)
 - [ ] [Aws Redshift](https://aws.amazon.com/redshift/)
+
+# How To Run
+## Build
+```cargo build --release```
+## Help
+```
+quipperindonesia@Quippers-MacBook-Pro Kmongo % target/release/kmongo --help
+CLI arguments structure
+
+Usage: kmongo --database <DATABASE> --collection <COLLECTION> --prefix-output-file <PREFIX_OUTPUT_FILE> --batch-size-in-mb <BATCH_SIZE_IN_MB> --threads <THREADS>
+
+Options:
+  -d, --database <DATABASE>                      mongodb database
+  -c, --collection <COLLECTION>                  mongodb collection
+  -p, --prefix-output-file <PREFIX_OUTPUT_FILE>  prefix file name for output
+  -b, --batch-size-in-mb <BATCH_SIZE_IN_MB>      batch size data for processing
+  -t, --threads <THREADS>                        threads amount for processing datas
+  -h, --help                                     Print help
+  -V, --version                                  Print version
+```
+## Run In Local Machine
+- GCS 
+  ```
+  export MONGODB_URI="mongodb://user:password@host:port_number"
+  export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa.json
+  kmongo --database <DATABASE> --collection <COLLECTION> --prefix-output-file <PREFIX_OUTPUT_FILE> --batch-size-in-mb <BATCH_SIZE_IN_MB> --threads <THREADS>
+  ```
