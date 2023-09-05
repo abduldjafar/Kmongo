@@ -17,7 +17,7 @@ Kmongo is a tool used for migrating data from MongoDB to another storage platfor
 ```cargo build --release```
 ## Help
 ```
-quipperindonesia@Quippers-MacBook-Pro Kmongo % target/release/kmongo --help
+asoi@asem Kmongo % target/release/kmongo --help
 CLI arguments structure
 
 Usage: kmongo --database <DATABASE> --collection <COLLECTION> --prefix-output-file <PREFIX_OUTPUT_FILE> --batch-size-in-mb <BATCH_SIZE_IN_MB> --threads <THREADS>
