@@ -16,7 +16,6 @@ use tokio::sync::Semaphore;
 use writer::{DataWriter, GcsStorage};
 
 
-/// ... (Args struct and other imports)
 /// CLI arguments structure
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -34,7 +33,7 @@ struct Args {
     #[arg(short, long, help = "batch size data for processing")]
     batch_size_in_mb: i32,
 
-    #[arg(short, long, help = "batch size data for processing")]
+    #[arg(short, long, help = "threads amount for processing datas")]
     threads: usize,
 }
 
@@ -75,7 +74,7 @@ async fn main() -> Result<(), custom_error::CustomError> {
     let mut index = 0;
     let config = ClientConfig::default().with_auth().await?;
     let gcs_storage = GcsStorage {
-        bucket: String::from("quipper-fact-dev"),
+        bucket: String::from("mongodb"),
         client: Client::new(config),
     };
 
