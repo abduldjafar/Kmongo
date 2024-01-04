@@ -26,6 +26,7 @@ jobs:
         run: |
             # Initialize an empty array for last words
             last_words=()
+            
 
             for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
                 # Extract the last word without extension
