@@ -17,9 +17,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Install dependencies and build
-        run: yarn install && yarn build && yarn package
-
       - name: Create a temp git dir
         run: |
           mkdir ${{ runner.temp }}/temp_git_dir
