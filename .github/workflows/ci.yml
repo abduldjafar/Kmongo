@@ -11,9 +11,6 @@ jobs:
   # ------------------------------------------------------------------------------------------------------------------------------------------------
   changed_files:
     runs-on: ubuntu-latest  # windows-latest || macos-latest
-    concurrency:
-      group: example-group
-      cancel-in-progress: false
     name: Test changed-files
     steps:
       - uses: actions/checkout@v2
