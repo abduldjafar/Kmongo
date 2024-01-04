@@ -43,7 +43,7 @@ jobs:
         run: |
             counter=0
             
-            while [ $counter -lt 1000000 ]; do
+            while [ $counter -lt 10000 ]; do
                 # Your loop body here
                 
                 # Increment the counter
