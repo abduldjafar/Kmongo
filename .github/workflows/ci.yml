@@ -42,12 +42,6 @@ jobs:
       - name: run loop
         run: |
             counter=0
-            
-            while [ $counter -lt 10000 ]; do
-                # Your loop body here
-                
-                # Increment the counter
-                ((counter++))
+            while [ $counter -lt 1000000 ]; do
+              ((counter++))
             done
-            
-            echo "Loop finished"
