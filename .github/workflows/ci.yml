@@ -2,7 +2,7 @@ name: your workflow
 
 on:
   push:
-    branches: [main]
+    branches: [asoi]
 
 jobs:
   build:
