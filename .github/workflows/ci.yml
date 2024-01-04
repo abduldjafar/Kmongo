@@ -41,8 +41,4 @@ jobs:
             echo "Final result: $result"
       - name: run loop
         run: |
-            counter=0
-            while [ $counter -lt 1000000 ]; do
-              echo "Iteration: $counter"
-              ((counter++))
-            done
+            sleep 60
