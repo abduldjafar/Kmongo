@@ -1,40 +1,78 @@
-name: CI
+name: your workflow
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: [main]
 
 jobs:
-  # ------------------------------------------------------------------------------------------------------------------------------------------------
-  # Event `pull_request`: Compare the last commit of the main branch or last remote commit of the PR branch -> to the current commit of a PR branch.
-  # ------------------------------------------------------------------------------------------------------------------------------------------------
-  changed_files:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    name: Test changed-files
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      # Example 1
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-        
-
-      - name: List all changed files
+      - name: Set up git committer identity
         run: |
-            # Initialize an empty array for last words
-            last_words=()
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-            for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-                # Extract the last word without extension
-                last_word=$(basename "$file" | sed 's/\.[^.]*$//')
+      - name: Install dependencies and build
+        run: yarn install && yarn build && yarn package
 
-                # Add the last word to the array
-                last_words+=("$last_word")
-            done
+      - name: Create a temp git dir
+        run: |
+          mkdir ${{ runner.temp }}/temp_git_dir
+          cd ${{ runner.temp }}/temp_git_dir
+          git config --global init.defaultBranch main
+          git init
+          git status
 
-            # Join the array elements with commas
-            result=$(IFS=,; echo "${last_words[*]}")
+      - name: Create new job
+        id: create-job
+        uses: Nautilus-Cyberneering/git-queue@v1
+        with:
+          git_repo_dir: ${{ runner.temp }}/temp_git_dir
+          queue_name: 'library update - library-aaa'
+          action: 'create-job'
+          job_payload: '{"field": "value", "state": "pending"}'
 
-            echo "Final result: $result"
+      - name: Mark job as started
+        id: start-job
+        if: ${{ steps.create-job.outputs.job_created == 'true' }}
+        uses: Nautilus-Cyberneering/git-queue@v1
+        with:
+          git_repo_dir: ${{ runner.temp }}/temp_git_dir
+          queue_name: 'library update - library-aaa'
+          action: 'start-job'
+          job_payload: '{"field": "value", "state": "started"}'
+
+      - name: Mutual exclusion code
+        if: ${{ steps.create-job.outputs.job_created == 'true' }}
+        run: echo "Running the job that requires mutual exclusion"
+
+      - name: Get next job
+        id: get-next-job
+        if: ${{ steps.create-job.outputs.job_created == 'true' }}
+        uses: Nautilus-Cyberneering/git-queue@v1
+        with:
+          git_repo_dir: ${{ runner.temp }}/temp_git_dir
+          queue_name: 'library update - library-aaa'
+          action: 'next-job'
+
+      - name: Mark job as finished
+        id: finish-job
+        if: ${{ steps.create-job.outputs.job_created == 'true' }}
+        uses: Nautilus-Cyberneering/git-queue@v1
+        with:
+          git_repo_dir: ${{ runner.temp }}/temp_git_dir
+          queue_name: 'library update - library-aaa'
+          action: 'finish-job'
+          job_payload: '{"field": "value", "state": "finished"}'
+
+      - name: Show new commits
+        run: |
+          cd ${{ runner.temp }}/temp_git_dir
+          git show --pretty="fuller" --show-signature ${{ steps.create-job.outputs.job_commit }}
+          git show --pretty="fuller" --show-signature ${{ steps.start-job.outputs.job_commit }}
+          git show --pretty="fuller" --show-signature ${{ steps.finish-job.outputs.job_commit }}
